@@ -80,7 +80,7 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    RealmPieDataSet *set = [[RealmPieDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex"];
+    RealmPieDataSet *set = [[RealmPieDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex"];
     
     set.valueFont = [UIFont systemFontOfSize:9.f];
     set.colors = ChartColorTemplates.vordiplom;

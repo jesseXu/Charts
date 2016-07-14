@@ -20,10 +20,10 @@ public class ChartRendererBase: NSObject
     public var viewPortHandler: ChartViewPortHandler!
     
     /// the minimum value on the x-axis that should be plotted
-    public var minX: Int = 0
+    public var minX: Double = 0.0
     
     /// the maximum value on the x-axis that should be plotted
-    public var maxX: Int = 0
+    public var maxX: Double = 0.0
     
     public override init()
     {
@@ -42,10 +42,10 @@ public class ChartRendererBase: NSObject
         let low = chart.lowestVisibleXIndex
         let high = chart.highestVisibleXIndex
         
-        let subLow = (low % xAxisModulus == 0) ? xAxisModulus : 0
+        let subLow = (low % Double(xAxisModulus) == 0.0) ? xAxisModulus : 0
         
-        minX = max((low / xAxisModulus) * (xAxisModulus) - subLow, 0)
-        maxX = min((high / xAxisModulus) * (xAxisModulus) + xAxisModulus, Int(chart.chartXMax))
+        minX = max((low / Double(xAxisModulus)) * Double(xAxisModulus) - Double(subLow), 0.0)
+        maxX = min((high / Double(xAxisModulus)) * Double(xAxisModulus) + Double(xAxisModulus), chart.chartXMax)
     }
 }
         

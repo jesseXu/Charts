@@ -93,13 +93,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i) stringValue]];
-    }
-    
     NSMutableArray *yVals1 = [[NSMutableArray alloc] init];
     NSMutableArray *yVals2 = [[NSMutableArray alloc] init];
     NSMutableArray *yVals3 = [[NSMutableArray alloc] init];
@@ -134,7 +127,7 @@
     [dataSets addObject:set2];
     [dataSets addObject:set3];
     
-    BubbleChartData *data = [[BubbleChartData alloc] initWithXVals:xVals dataSets:dataSets];
+    BubbleChartData *data = [[BubbleChartData alloc] initWithDataSets:dataSets];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:7.f]];
     [data setHighlightCircleWidth: 1.5];
     [data setValueTextColor:UIColor.whiteColor];

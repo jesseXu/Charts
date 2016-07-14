@@ -27,31 +27,29 @@ public class ChartYAxisRendererHorizontalBarChart: ChartYAxisRenderer
     }
 
     /// Computes the axis values.
-    public override func computeAxis(yMin yMin: Double, yMax: Double)
+    public override func computeAxis(min min: Double, max: Double, inverted: Bool)
     {
-        guard let yAxis = yAxis else { return }
-        
-        var yMin = yMin, yMax = yMax
+        var min = min, max = max
         
         // calculate the starting and entry point of the y-labels (depending on zoom / contentrect bounds)
-        if (viewPortHandler.contentHeight > 10.0 && !viewPortHandler.isFullyZoomedOutX)
+        if viewPortHandler.contentHeight > 10.0 && !viewPortHandler.isFullyZoomedOutX
         {
             let p1 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentTop))
             let p2 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentRight, y: viewPortHandler.contentTop))
             
-            if (!yAxis.isInverted)
+            if !inverted
             {
-                yMin = Double(p1.x)
-                yMax = Double(p2.x)
+                min = Double(p1.x)
+                max = Double(p2.x)
             }
             else
             {
-                yMin = Double(p2.x)
-                yMax = Double(p1.x)
+                min = Double(p2.x)
+                max = Double(p1.x)
             }
         }
         
-        computeAxisValues(min: yMin, max: yMax)
+        computeAxisValues(min: min, max: max)
     }
 
     /// draws the y-axis labels to the screen

@@ -56,7 +56,7 @@ public class ZoomChartViewJob: ChartViewPortJob
         viewPortHandler.refresh(newMatrix: matrix, chart: view, invalidate: false)
         
         let valsInView = (view as! BarLineChartViewBase).getDeltaY(axisDependency) / viewPortHandler.scaleY
-        let xsInView = CGFloat((view as! BarLineChartViewBase).xAxis.values.count) / viewPortHandler.scaleX
+        let xsInView = CGFloat((view as! BarLineChartViewBase).xAxis.axisRange) / viewPortHandler.scaleX
         
         var pt = CGPoint(
             x: xIndex - xsInView / 2.0,

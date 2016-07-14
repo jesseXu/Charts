@@ -67,7 +67,7 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    RealmScatterDataSet *set = [[RealmScatterDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex"];
+    RealmScatterDataSet *set = [[RealmScatterDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex"];
     
     set.label = @"Realm ScatterDataSet";
     set.scatterShapeSize = 9.f;

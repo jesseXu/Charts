@@ -30,9 +30,9 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         self.chart = chart
     }
     
-    public override func computeAxis(yMin yMin: Double, yMax: Double)
+    public override func computeAxis(min min: Double, max: Double, inverted: Bool)
     {
-        computeAxisValues(min: yMin, max: yMax)
+        computeAxisValues(min: min, max: max)
     }
     
     public override func computeAxisValues(min yMin: Double, max yMax: Double)
@@ -196,7 +196,8 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
     {
         guard let
             yAxis = yAxis,
-            chart = chart
+            chart = chart,
+            data = chart.data
             else { return }
         
         var limitLines = yAxis.limitLines
@@ -239,7 +240,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             CGContextBeginPath(context)
             
-            for j in 0 ..< chart.data!.xValCount
+            for j in 0 ..< data.maxEntryCountSet.entryCount
             {
                 let p = ChartUtils.getPosition(center: center, dist: r, angle: sliceangle * CGFloat(j) + chart.rotationAngle)
                 

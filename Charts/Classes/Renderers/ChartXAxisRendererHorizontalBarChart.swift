@@ -26,11 +26,9 @@ public class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
         super.init(viewPortHandler: viewPortHandler, xAxis: xAxis, transformer: transformer, chart: chart)
     }
     
-    public override func computeAxis(xValAverageLength xValAverageLength: Double, xValues: [String?])
+    public override func computeSize()
     {
         guard let xAxis = xAxis else { return }
-        
-        xAxis.values = xValues
        
         let longest = xAxis.getLongestLabel() as NSString
         
@@ -84,7 +82,7 @@ public class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
     /// draws the x-labels on the specified y-position
     public override func drawLabels(context context: CGContext, pos: CGFloat, anchor: CGPoint)
     {
-        guard let
+        /*guard let
             xAxis = xAxis,
             bd = chart?.data as? BarChartData
             else { return }
@@ -122,7 +120,7 @@ public class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
             {
                 drawLabel(context: context, label: label!, xIndex: i, x: pos, y: position.y, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor], anchor: anchor, angleRadians: labelRotationAngleRadians)
             }
-        }
+        }*/
     }
     
     public func drawLabel(context context: CGContext, label: String, xIndex: Int, x: CGFloat, y: CGFloat, attributes: [String: NSObject], anchor: CGPoint, angleRadians: CGFloat)
@@ -137,7 +135,7 @@ public class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
     
     public override func renderGridLines(context context: CGContext)
     {
-        guard let
+        /*guard let
             xAxis = xAxis,
             bd = chart?.data as? BarChartData
             else { return }
@@ -185,7 +183,7 @@ public class ChartXAxisRendererHorizontalBarChart: ChartXAxisRendererBarChart
             }
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context)*/
     }
     
     private var _axisLineSegmentsBuffer = [CGPoint](count: 2, repeatedValue: CGPoint())

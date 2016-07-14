@@ -93,13 +93,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i + 1990) stringValue]];
-    }
-    
     NSMutableArray *yVals1 = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
@@ -126,7 +119,7 @@
     set1.increasingFilled = NO;
     set1.neutralColor = UIColor.blueColor;
     
-    CandleChartData *data = [[CandleChartData alloc] initWithXVals:xVals dataSet:set1];
+    CandleChartData *data = [[CandleChartData alloc] initWithDataSet:set1];
     
     _chartView.data = data;
 }

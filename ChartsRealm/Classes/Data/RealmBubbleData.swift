@@ -20,15 +20,8 @@ import Realm.Dynamic
 
 public class RealmBubbleData: BubbleChartData
 {
-    public init(results: RLMResults?, xValueField: String, dataSets: [IChartDataSet]?)
+    public init(dataSets: [IChartDataSet]?)
     {
-        if results == nil
-        {
-            super.init(xVals: [String](), dataSets: dataSets)
-        }
-        else
-        {
-            super.init(xVals: RealmChartUtils.toXVals(results: results!, xValueField: xValueField), dataSets: dataSets)
-        }
+        super.init(dataSets: dataSets)
     }
 }

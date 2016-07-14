@@ -21,7 +21,7 @@ public class BubbleChartView: BarLineChartViewBase, BubbleChartDataProvider
         renderer = BubbleChartRenderer(dataProvider: self, animator: _animator, viewPortHandler: _viewPortHandler)
     }
     
-    public override func calcMinMax()
+    /*public override func calcMinMax()
     {
         super.calcMinMax()
         guard let data = _data else { return }
@@ -55,7 +55,7 @@ public class BubbleChartView: BarLineChartViewBase, BubbleChartDataProvider
         }
         
         _xAxis.axisRange = abs(_xAxis._axisMaximum - _xAxis._axisMinimum)
-    }
+    }*/
     
     // MARK: - BubbleChartDataProbider
     

@@ -54,7 +54,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         
         for i in 0 ..< yVals.count
         {
-            let vals = yVals[i].values
+            let vals = yVals[i].yValues
             
             if (vals == nil)
             {
@@ -72,7 +72,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
     {
         for i in 0 ..< yVals.count
         {
-            if let vals = yVals[i].values
+            if let vals = yVals[i].yValues
             {
                 if vals.count > _stackSize
                 {
@@ -82,62 +82,56 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         }
     }
     
-    public override func calcMinMax(start start : Int, end: Int)
+    public override func calcMinMax()
     {
-        let yValCount = _yVals.count
-        
-        if yValCount == 0
+        if _values.count == 0
         {
             return
         }
-        
-        var endValue : Int
-        
-        if end == 0 || end >= yValCount
-        {
-            endValue = yValCount - 1
-        }
-        else
-        {
-            endValue = end
-        }
-        
-        _lastStart = start
-        _lastEnd = endValue
-        
+    
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for i in start.stride(through: endValue, by: 1)
+        _xMin = DBL_MAX
+        _xMax = -DBL_MAX
+        
+        for e in _values as! [BarChartDataEntry]
         {
-            if let e = _yVals[i] as? BarChartDataEntry
+            if !e.y.isNaN
             {
-                if !e.value.isNaN
+                if e.yValues == nil
                 {
-                    if e.values == nil
+                    if e.y < _yMin
                     {
-                        if e.value < _yMin
-                        {
-                            _yMin = e.value
-                        }
-                        
-                        if e.value > _yMax
-                        {
-                            _yMax = e.value
-                        }
+                        _yMin = e.y
                     }
-                    else
+                    
+                    if e.y > _yMax
                     {
-                        if -e.negativeSum < _yMin
-                        {
-                            _yMin = -e.negativeSum
-                        }
-                        
-                        if e.positiveSum > _yMax
-                        {
-                            _yMax = e.positiveSum
-                        }
+                        _yMax = e.y
                     }
+                }
+                else
+                {
+                    if -e.negativeSum < _yMin
+                    {
+                        _yMin = -e.negativeSum
+                    }
+                    
+                    if e.positiveSum > _yMax
+                    {
+                        _yMax = e.positiveSum
+                    }
+                }
+                
+                if e.x < _xMin
+                {
+                    _xMin = e.x
+                }
+                
+                if e.x > _xMax
+                {
+                    _xMax = e.x
                 }
             }
         }
@@ -146,6 +140,12 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         {
             _yMin = 0.0
             _yMax = 0.0
+        }
+        
+        if (_xMin == DBL_MAX)
+        {
+            _xMin = 0.0
+            _xMax = 0.0
         }
     }
     
@@ -172,9 +172,6 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
     
     // MARK: - Styling functions and accessors
     
-    /// space indicator between the bars in percentage of the whole width of one value (0.15 == 15% of bar width)
-    public var barSpace: CGFloat = 0.15
-    
     /// the color used for drawing the bar-shadows. The bar shadows is a surface behind the bar that indicates the maximum value
     public var barShadowColor = NSUIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1.0)
 
@@ -195,7 +192,7 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         copy._stackSize = _stackSize
         copy._entryCountStacks = _entryCountStacks
         copy.stackLabels = stackLabels
-        copy.barSpace = barSpace
+
         copy.barShadowColor = barShadowColor
         copy.highlightAlpha = highlightAlpha
         return copy

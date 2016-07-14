@@ -114,7 +114,7 @@ public class PieChartRenderer: ChartDataRendererBase
         for j in 0 ..< entryCount
         {
             guard let e = dataSet.entryForIndex(j) else { continue }
-            if ((abs(e.value) > 0.000001))
+            if ((abs(e.y) > 0.000001))
             {
                 visibleAngleCount += 1
             }
@@ -132,9 +132,9 @@ public class PieChartRenderer: ChartDataRendererBase
             guard let e = dataSet.entryForIndex(j) else { continue }
             
             // draw only if the value is greater than zero
-            if ((abs(e.value) > 0.000001))
+            if ((abs(e.y) > 0.000001))
             {
-                if (!chart.needsHighlight(xIndex: e.xIndex,
+                if (!chart.needsHighlight(xValue: e.x,
                     dataSetIndex: data.indexOfDataSet(dataSet)))
                 {
                     let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
@@ -326,12 +326,8 @@ public class PieChartRenderer: ChartDataRendererBase
             
             for j in 0 ..< dataSet.entryCount
             {
-                if (drawXVals && !drawYVals && (j >= data.xValCount || data.xVals[j] == nil))
-                {
-                    continue
-                }
-                
                 guard let e = dataSet.entryForIndex(j) else { continue }
+                let pe = e as? PieChartDataEntry
                 
                 if (xIndex == 0)
                 {
@@ -353,7 +349,7 @@ public class PieChartRenderer: ChartDataRendererBase
                 
                 let transformedAngle = rotationAngle + angle * phaseY
                 
-                let value = usePercentValuesEnabled ? e.value / yValueSum * 100.0 : e.value
+                let value = usePercentValuesEnabled ? e.y / yValueSum * 100.0 : e.y
                 let valueText = formatter.stringFromNumber(value)!
                 
                 let sliceXBase = cos(transformedAngle * ChartUtils.Math.FDEG2RAD)
@@ -432,22 +428,22 @@ public class PieChartRenderer: ChartDataRendererBase
                             attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
                         )
                         
-                        if (j < data.xValCount && data.xVals[j] != nil)
+                        if (j < data.entryCount && pe?.label != nil)
                         {
                             ChartUtils.drawText(
                                 context: context,
-                                text: data.xVals[j]!,
+                                text: pe!.label!,
                                 point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight),
                                 align: align,
                                 attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
                             )
                         }
                     }
-                    else if drawXOutside
+                    else if drawXOutside && pe?.label != nil
                     {
                         ChartUtils.drawText(
                             context: context,
-                            text: data.xVals[j]!,
+                            text: pe!.label!,
                             point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight / 2.0),
                             align: align,
                             attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
@@ -481,22 +477,22 @@ public class PieChartRenderer: ChartDataRendererBase
                             attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
                         )
                         
-                        if j < data.xValCount && data.xVals[j] != nil
+                        if j < data.entryCount && pe?.label != nil
                         {
                             ChartUtils.drawText(
                                 context: context,
-                                text: data.xVals[j]!,
+                                text: pe!.label!,
                                 point: CGPoint(x: x, y: y + lineHeight),
                                 align: .Center,
                                 attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
                             )
                         }
                     }
-                    else if drawXInside
+                    else if drawXInside && pe?.label != nil
                     {
                         ChartUtils.drawText(
                             context: context,
-                            text: data.xVals[j]!,
+                            text: pe!.label!,
                             point: CGPoint(x: x, y: y + lineHeight / 2.0),
                             align: .Center,
                             attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
@@ -650,8 +646,8 @@ public class PieChartRenderer: ChartDataRendererBase
         for i in 0 ..< indices.count
         {
             // get the index to highlight
-            let xIndex = indices[i].xIndex
-            if (xIndex >= drawAngles.count)
+            let x = indices[i].x
+            if x >= Double(drawAngles.count)
             {
                 continue
             }
@@ -663,29 +659,31 @@ public class PieChartRenderer: ChartDataRendererBase
                 continue
             }
             
+            let entryIndex = set.entryIndex(x: x, rounding: .Closest)
+
             let entryCount = set.entryCount
             var visibleAngleCount = 0
             for j in 0 ..< entryCount
             {
                 guard let e = set.entryForIndex(j) else { continue }
-                if ((abs(e.value) > 0.000001))
+                if ((abs(e.y) > 0.000001))
                 {
                     visibleAngleCount += 1
                 }
             }
             
-            if (xIndex == 0)
+            if (x == 0)
             {
                 angle = 0.0
             }
             else
             {
-                angle = absoluteAngles[xIndex - 1] * phaseX
+                angle = absoluteAngles[entryIndex - 1] * phaseX
             }
             
             let sliceSpace = visibleAngleCount <= 1 ? 0.0 : set.sliceSpace
             
-            let sliceAngle = drawAngles[xIndex]
+            let sliceAngle = drawAngles[entryIndex]
             var innerRadius = userInnerRadius
             
             let shift = set.selectionShift
@@ -693,7 +691,7 @@ public class PieChartRenderer: ChartDataRendererBase
             
             let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
             
-            CGContextSetFillColorWithColor(context, set.colorAt(xIndex).CGColor)
+            CGContextSetFillColorWithColor(context, set.colorAt(entryIndex).CGColor)
             
             let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
                 0.0 :

@@ -450,14 +450,14 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
     
     /// Highlights the value at the given x-index in the given DataSet.
     /// Provide -1 as the x-index to undo all highlighting.
-    public func highlightValue(xIndex xIndex: Int, dataSetIndex: Int)
+    public func highlightValue(x x: Double, dataSetIndex: Int)
     {
-        highlightValue(xIndex: xIndex, dataSetIndex: dataSetIndex, callDelegate: true)
+        highlightValue(x: x, dataSetIndex: dataSetIndex, callDelegate: true)
     }
     
     /// Highlights the value at the given x-index in the given DataSet.
-    /// Provide -1 as the x-index to undo all highlighting.
-    public func highlightValue(xIndex xIndex: Int, dataSetIndex: Int, callDelegate: Bool)
+    /// Provide -1 as the dataSetIndex to undo all highlighting.
+    public func highlightValue(x x: Double, dataSetIndex: Int, callDelegate: Bool)
     {
         guard let data = _data else
         {
@@ -465,13 +465,13 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
             return
         }
 
-        if (xIndex < 0 || dataSetIndex < 0 || xIndex >= data.xValCount || dataSetIndex >= data.dataSetCount)
+        if dataSetIndex < 0 || dataSetIndex >= data.dataSetCount
         {
             highlightValue(highlight: nil, callDelegate: callDelegate)
         }
         else
         {
-            highlightValue(highlight: ChartHighlight(xIndex: xIndex, dataSetIndex: dataSetIndex), callDelegate: callDelegate)
+            highlightValue(highlight: ChartHighlight(x: x, dataSetIndex: dataSetIndex), callDelegate: callDelegate)
         }
     }
 
@@ -499,7 +499,7 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
                 if self is BarLineChartViewBase
                     && (self as! BarLineChartViewBase).isHighlightFullBarEnabled
                 {
-                    h = ChartHighlight(xIndex: h!.xIndex, value: Double.NaN, dataIndex: -1, dataSetIndex: -1, stackIndex: -1)
+                    h = ChartHighlight(x: h!.x, y: Double.NaN, dataIndex: -1, dataSetIndex: -1, stackIndex: -1)
                 }
                 
                 _indicesToHighlight = [h!]
@@ -540,13 +540,13 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
         for i in 0 ..< _indicesToHighlight.count
         {
             let highlight = _indicesToHighlight[i]
-            let xIndex = highlight.xIndex
+            let xVal = highlight.x
 
-            let deltaX = _xAxis?.axisRange ?? (Double(_data?.xValCount ?? 0) - 1)
-            if xIndex <= Int(deltaX) && xIndex <= Int(CGFloat(deltaX) * _animator.phaseX)
+            let deltaX = _xAxis?.axisRange ?? 1.0
+            if xVal <= deltaX && xVal <= deltaX * Double(_animator.phaseX)
             {
                 let e = _data?.getEntryForHighlight(highlight)
-                if (e === nil || e!.xIndex != highlight.xIndex)
+                if (e === nil || e!.x != highlight.x)
                 {
                     continue
                 }
@@ -717,9 +717,9 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
         return _xAxis._axisMinimum
     }
     
-    public var xValCount: Int
+    public var xRange: Double
     {
-        return _data?.xValCount ?? 0
+        return _xAxis.axisRange
     }
     
     /// - returns: the total number of (y) values the chart holds (across all DataSets)
@@ -765,19 +765,8 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
         return _viewPortHandler.contentRect
     }
     
-    /// - returns: the x-value at the given index
-    public func getXValue(index: Int) -> String!
-    {
-        guard let data = _data where data.xValCount > index else
-        {
-            return nil
-        }
-
-        return data.xVals[index]
-    }
-    
     /// Get all Entry objects at the given index across all DataSets.
-    public func getEntriesAtIndex(xIndex: Int) -> [ChartDataEntry]
+    public func getEntriesAtIndex(xValue: Double) -> [ChartDataEntry]
     {
         var vals = [ChartDataEntry]()
         
@@ -786,7 +775,7 @@ public class ChartViewBase: NSUIView, ChartDataProvider, ChartAnimatorDelegate
         for i in 0 ..< data.dataSetCount
         {
             let set = data.getDataSetByIndex(i)
-            let e = set.entryForXIndex(xIndex)
+            let e = set.entryForXPos(xValue)
             if (e !== nil)
             {
                 vals.append(e!)

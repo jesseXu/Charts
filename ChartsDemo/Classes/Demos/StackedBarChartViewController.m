@@ -51,7 +51,7 @@
     _chartView.descriptionText = @"";
     _chartView.noDataTextDescription = @"You need to provide data for the chart.";
     
-    _chartView.maxVisibleValueCount = 60;
+    _chartView.maxVisibleValueCount = 40;
     _chartView.pinchZoomEnabled = NO;
     _chartView.drawGridBackgroundEnabled = NO;
     _chartView.drawBarShadowEnabled = NO;
@@ -100,13 +100,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:months[i % 12]];
-    }
-    
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
@@ -124,7 +117,6 @@
     {
         set1 = (BarChartDataSet *)_chartView.data.dataSets[0];
         set1.yVals = yVals;
-        _chartView.data.xValsObjc = xVals;
         [_chartView notifyDataSetChanged];
     }
     else
@@ -141,9 +133,12 @@
         formatter.negativeSuffix = @" $";
         formatter.positiveSuffix = @" $";
         
-        BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
+        BarChartData *data = [[BarChartData alloc] initWithDataSets:dataSets];
         [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:7.f]];
         [data setValueFormatter:formatter];
+        [data setValueTextColor:UIColor.whiteColor];
+        
+        data.barWidth = 0.8;
         
         _chartView.data = data;
     }

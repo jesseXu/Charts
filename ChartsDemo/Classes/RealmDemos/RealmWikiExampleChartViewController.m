@@ -91,7 +91,7 @@
     // Line chart
     RLMResults *results = [Score allObjectsInRealm:realm];
     
-    RealmLineDataSet *lineDataSet = [[RealmLineDataSet alloc] initWithResults:results yValueField:@"totalScore" xIndexField:@"scoreNr"];
+    RealmLineDataSet *lineDataSet = [[RealmLineDataSet alloc] initWithResults:results yValueField:@"totalScore" xValueField:@"scoreNr"];
     lineDataSet.drawCubicEnabled = NO;
     lineDataSet.label = @"Realm LineDataSet";
     lineDataSet.drawCircleHoleEnabled = NO;
@@ -111,7 +111,7 @@
                                 easingOption:ChartEasingOptionEaseInOutQuart];
     
     // Bar chart
-    RealmBarDataSet *barDataSet = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"totalScore" xIndexField:@"scoreNr"];
+    RealmBarDataSet *barDataSet = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"totalScore" xValueField:@"scoreNr"];
     barDataSet.colors = @[
                           [ChartColorTemplates colorFromString:@"#FF5722"],
                           [ChartColorTemplates colorFromString:@"#03A9F4"],

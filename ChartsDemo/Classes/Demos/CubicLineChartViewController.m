@@ -115,13 +115,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i + 1990) stringValue]];
-    }
-    
     NSMutableArray *yVals1 = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
@@ -136,7 +129,6 @@
     {
         set1 = (LineChartDataSet *)_chartView.data.dataSets[0];
         set1.yVals = yVals1;
-        _chartView.data.xValsObjc = xVals;
         [_chartView.data notifyDataChanged];
         [_chartView notifyDataSetChanged];
     }
@@ -156,7 +148,7 @@
         set1.drawHorizontalHighlightIndicatorEnabled = NO;
         set1.fillFormatter = [[CubicLineSampleFillFormatter alloc] init];
         
-        LineChartData *data = [[LineChartData alloc] initWithXVals:xVals dataSet:set1];
+        LineChartData *data = [[LineChartData alloc] initWithDataSet:set1];
         [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:9.f]];
         [data setDrawValues:NO];
         

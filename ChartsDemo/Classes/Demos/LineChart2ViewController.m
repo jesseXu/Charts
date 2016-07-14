@@ -114,13 +114,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i) stringValue]];
-    }
-    
     NSMutableArray *yVals1 = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
@@ -147,7 +140,6 @@
         set2 = (LineChartDataSet *)_chartView.data.dataSets[1];
         set1.yVals = yVals1;
         set2.yVals = yVals2;
-        _chartView.data.xValsObjc = xVals;
         [_chartView.data notifyDataChanged];
         [_chartView notifyDataSetChanged];
     }
@@ -179,7 +171,7 @@
         [dataSets addObject:set2];
         [dataSets addObject:set1];
         
-        LineChartData *data = [[LineChartData alloc] initWithXVals:xVals dataSets:dataSets];
+        LineChartData *data = [[LineChartData alloc] initWithDataSets:dataSets];
         [data setValueTextColor:UIColor.whiteColor];
         [data setValueFont:[UIFont systemFontOfSize:9.f]];
         

@@ -71,8 +71,8 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    // RealmRadarDataSet *set = [[RealmRadarDataSet alloc] initWithResults:results yValueField:@"stackValues" xIndexField:@"xIndex"]; // normal entries
-    RealmRadarDataSet *set = [[RealmRadarDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex"]; // stacked entries
+    // RealmRadarDataSet *set = [[RealmRadarDataSet alloc] initWithResults:results yValueField:@"stackValues" xValueField:@"xIndex"]; // normal entries
+    RealmRadarDataSet *set = [[RealmRadarDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex"]; // stacked entries
     
     set.label = @"Realm RadarDataSet";
     set.drawFilledEnabled = YES;

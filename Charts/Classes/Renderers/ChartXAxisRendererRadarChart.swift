@@ -55,20 +55,15 @@ public class ChartXAxisRendererRadarChart: ChartXAxisRenderer
         let center = chart.centerOffsets
         
         let modulus = xAxis.axisLabelModulus
-        for i in 0.stride(to: xAxis.values.count, by: modulus)
+        for i in 0.stride(to: xAxis.entryCount, by: modulus)
         {
-            let label = xAxis.values[i]
-            
-            if (label == nil)
-            {
-                continue
-            }
+            let label = String(xAxis.entries[i])
             
             let angle = (sliceangle * CGFloat(i) + chart.rotationAngle) % 360.0
             
             let p = ChartUtils.getPosition(center: center, dist: CGFloat(chart.yRange) * factor + xAxis.labelRotatedWidth / 2.0, angle: angle)
             
-            drawLabel(context: context, label: label!, xIndex: i, x: p.x, y: p.y - xAxis.labelRotatedHeight / 2.0, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor], anchor: drawLabelAnchor, angleRadians: labelRotationAngleRadians)
+            drawLabel(context: context, label: label, xIndex: i, x: p.x, y: p.y - xAxis.labelRotatedHeight / 2.0, attributes: [NSFontAttributeName: labelFont, NSForegroundColorAttributeName: labelTextColor], anchor: drawLabelAnchor, angleRadians: labelRotationAngleRadians)
         }
     }
     

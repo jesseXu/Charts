@@ -92,13 +92,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i) stringValue]];
-    }
-    
     NSArray *colors = @[ChartColorTemplates.vordiplom[0], ChartColorTemplates.vordiplom[1], ChartColorTemplates.vordiplom[2]];
     
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
@@ -127,7 +120,7 @@
     ((LineChartDataSet *)dataSets[0]).colors = ChartColorTemplates.vordiplom;
     ((LineChartDataSet *)dataSets[0]).circleColors = ChartColorTemplates.vordiplom;
     
-    LineChartData *data = [[LineChartData alloc] initWithXVals:xVals dataSets:dataSets];
+    LineChartData *data = [[LineChartData alloc] initWithDataSets:dataSets];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:7.f]];
     _chartView.data = data;
 }

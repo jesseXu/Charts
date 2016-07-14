@@ -91,7 +91,7 @@ public class RadarChartRenderer: LineRadarChartRenderer
             
             let p = ChartUtils.getPosition(
                 center: center,
-                dist: CGFloat(e.value - chart.chartYMin) * factor * phaseY,
+                dist: CGFloat(e.y - chart.chartYMin) * factor * phaseY,
                 angle: sliceangle * CGFloat(j) * phaseX + chart.rotationAngle)
             
             if p.x.isNaN
@@ -184,7 +184,7 @@ public class RadarChartRenderer: LineRadarChartRenderer
                 
                 let p = ChartUtils.getPosition(
                     center: center,
-                    dist: CGFloat(e.value) * factor * phaseY,
+                    dist: CGFloat(e.y) * factor * phaseY,
                     angle: sliceangle * CGFloat(j) * phaseX + chart.rotationAngle)
                 
                 let valueFont = dataSet.valueFont
@@ -193,7 +193,7 @@ public class RadarChartRenderer: LineRadarChartRenderer
                 
                 ChartUtils.drawText(
                     context: context,
-                    text: formatter.stringFromNumber(e.value)!,
+                    text: formatter.stringFromNumber(e.y)!,
                     point: CGPoint(x: p.x, y: p.y - yoffset - valueFont.lineHeight),
                     align: .Center,
                     attributes: [NSFontAttributeName: valueFont,
@@ -235,7 +235,7 @@ public class RadarChartRenderer: LineRadarChartRenderer
         
         let xIncrements = 1 + chart.skipWebLineCount
         
-        for i in 0.stride(to: data.xValCount, by: xIncrements)
+        for i in 0.stride(to: data.entryCount, by: xIncrements)
         {
             let p = ChartUtils.getPosition(
                 center: center,
@@ -255,11 +255,11 @@ public class RadarChartRenderer: LineRadarChartRenderer
         CGContextSetStrokeColorWithColor(context, chart.innerWebColor.CGColor)
         CGContextSetAlpha(context, chart.webAlpha)
         
-        let labelCount = chart.yAxis.entryCount
+        let labelCount = chart.yAxis.entries.count
         
         for j in 0 ..< labelCount
         {
-            for i in 0 ..< data.xValCount
+            for i in 0 ..< data.entryCount
             {
                 let r = CGFloat(chart.yAxis.entries[j] - chart.chartYMin) * factor
 
@@ -319,16 +319,16 @@ public class RadarChartRenderer: LineRadarChartRenderer
             CGContextSetStrokeColorWithColor(context, set.highlightColor.CGColor)
             
             // get the index to highlight
-            let xIndex = indices[i].xIndex
+            let x = indices[i].x
             
-            let e = set.entryForXIndex(xIndex)
-            if e?.xIndex != xIndex
+            let e = set.entryForXPos(x)
+            if e?.x != x
             {
                 continue
             }
             
             let j = set.entryIndex(entry: e!)
-            let y = (e!.value - chart.chartYMin)
+            let y = (e!.y - chart.chartYMin)
             
             if (y.isNaN)
             {

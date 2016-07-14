@@ -20,7 +20,7 @@ public class CombinedHighlighter: ChartHighlighter
     /// Returns a list of SelectionDetail object corresponding to the given xIndex.
     /// - parameter xIndex:
     /// - returns:
-    public override func getSelectionDetailsAtIndex(xIndex: Int, dataSetIndex: Int?) -> [ChartSelectionDetail]
+    public override func getSelectionDetailsAtIndex(xValue: Double) -> [ChartSelectionDetail]
     {
         var vals = [ChartSelectionDetail]()
         var pt = CGPoint()
@@ -45,7 +45,7 @@ public class CombinedHighlighter: ChartHighlighter
                 }
                 
                 // extract all y-values from all DataSets at the given x-index
-                let yVals: [Double] = dataSet.yValsForXIndex(xIndex)
+                let yVals: [Double] = dataSet.yValuesForXValue(xValue)
                 for yVal in yVals
                 {
                     pt.y = CGFloat(yVal)
@@ -56,7 +56,7 @@ public class CombinedHighlighter: ChartHighlighter
                     
                     if !pt.y.isNaN
                     {
-                        vals.append(ChartSelectionDetail(y: pt.y, value: yVal, dataIndex: i, dataSetIndex: j, dataSet: dataSet))
+                        vals.append(ChartSelectionDetail(x: 0.0, y: pt.y, xValue: xValue, yValue: yVal, dataIndex: i, dataSetIndex: j, dataSet: dataSet))
                     }
                 }
             }

@@ -21,6 +21,6 @@ public protocol BarLineScatterCandleBubbleChartDataProvider: ChartDataProvider
     var maxVisibleValueCount: Int { get }
     func isInverted(axis: ChartYAxis.AxisDependency) -> Bool
     
-    var lowestVisibleXIndex: Int { get }
-    var highestVisibleXIndex: Int { get }
+    var lowestVisibleXIndex: Double { get }
+    var highestVisibleXIndex: Double { get }
 }

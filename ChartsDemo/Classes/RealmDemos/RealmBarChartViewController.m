@@ -64,7 +64,7 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex"];
+    RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex"];
     set.colors = @[[ChartColorTemplates colorFromString:@"#FF5722"],
                    [ChartColorTemplates colorFromString:@"#03A9F4"]];
     set.label = @"Realm BarDataSet";

@@ -30,38 +30,10 @@ public class ChartYAxisRenderer: ChartAxisRendererBase
         self.yAxis = yAxis
     }
     
-    /// Computes the axis values.
-    public func computeAxis(yMin yMin: Double, yMax: Double)
-    {
-        guard let yAxis = yAxis else { return }
-        var yMin = yMin, yMax = yMax
-        
-        // calculate the starting and entry point of the y-labels (depending on
-        // zoom / contentrect bounds)
-        if (viewPortHandler.contentWidth > 10.0 && !viewPortHandler.isFullyZoomedOutY)
-        {
-            let p1 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentTop))
-            let p2 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentBottom))
-            
-            if (!yAxis.isInverted)
-            {
-                yMin = Double(p2.y)
-                yMax = Double(p1.y)
-            }
-            else
-            {
-                yMin = Double(p1.y)
-                yMax = Double(p2.y)
-            }
-        }
-        
-        computeAxisValues(min: yMin, max: yMax)
-    }
-    
     /// Sets up the y-axis labels. Computes the desired number of labels between
     /// the two given extremes. Unlike the papareXLabels() method, this method
     /// needs to be called upon every refresh of the view.
-    public func computeAxisValues(min min: Double, max: Double)
+    public override func computeAxisValues(min min: Double, max: Double)
     {
         guard let yAxis = yAxis else { return }
         

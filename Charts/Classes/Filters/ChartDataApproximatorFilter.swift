@@ -115,7 +115,7 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
             if (keep[i])
             {
                 let curEntry = entries[i]
-                reducedEntries.append(ChartDataEntry(value: curEntry.value, xIndex: curEntry.xIndex))
+                reducedEntries.append(ChartDataEntry(x: curEntry.x, y: curEntry.y))
             }
         }
         
@@ -173,17 +173,17 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     /// - parameter entryPoint: the point to which the distance is measured from the line
     private func calcPointToLineDistance(startEntry: ChartDataEntry, endEntry: ChartDataEntry, entryPoint: ChartDataEntry) -> Double
     {
-        let xDiffEndStart = Double(endEntry.xIndex) - Double(startEntry.xIndex)
-        let xDiffEntryStart = Double(entryPoint.xIndex) - Double(startEntry.xIndex)
+        let xDiffEndStart = endEntry.x - startEntry.x
+        let xDiffEntryStart = entryPoint.x - startEntry.x
         
         let normalLength = sqrt((xDiffEndStart)
             * (xDiffEndStart)
-            + (endEntry.value - startEntry.value)
-            * (endEntry.value - startEntry.value))
+            + (endEntry.y - startEntry.y)
+            * (endEntry.y - startEntry.y))
         
         return Double(fabs((xDiffEntryStart)
-            * (endEntry.value - startEntry.value)
-            - (entryPoint.value - startEntry.value)
+            * (endEntry.y - startEntry.y)
+            - (entryPoint.y - startEntry.y)
             * (xDiffEndStart))) / Double(normalLength)
     }
     
@@ -199,16 +199,16 @@ public class ChartDataApproximatorFilter: ChartDataBaseFilter
     /// calculates the angle between two entries (points) in the chart taking ratios into consideration
     private func calcAngleWithRatios(p1: ChartDataEntry, p2: ChartDataEntry) -> Double
     {
-        let dx = Double(p2.xIndex) * Double(deltaRatio) - Double(p1.xIndex) * Double(deltaRatio)
-        let dy = p2.value * scaleRatio - p1.value * scaleRatio
+        let dx = p2.x * Double(deltaRatio) - p1.x * Double(deltaRatio)
+        let dy = p2.y * scaleRatio - p1.y * scaleRatio
         return atan2(Double(dy), dx) * ChartUtils.Math.RAD2DEG
     }
     
     // calculates the angle between two entries (points) in the chart
     private func calcAngle(p1: ChartDataEntry, p2: ChartDataEntry) -> Double
     {
-        let dx = p2.xIndex - p1.xIndex
-        let dy = p2.value - p1.value
-        return atan2(Double(dy), Double(dx)) * ChartUtils.Math.RAD2DEG
+        let dx = p2.x - p1.x
+        let dy = p2.y - p1.y
+        return atan2(dy, dx) * ChartUtils.Math.RAD2DEG
     }
 }

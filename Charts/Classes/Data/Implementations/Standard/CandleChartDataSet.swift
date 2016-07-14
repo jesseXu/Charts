@@ -30,7 +30,7 @@ public class CandleChartDataSet: LineScatterCandleRadarChartDataSet, ICandleChar
     
     // MARK: - Data functions and accessors
     
-    public override func calcMinMax(start start: Int, end: Int)
+    public override func calcMinMax()
     {
         let yValCount = self.entryCount
         
@@ -39,29 +39,14 @@ public class CandleChartDataSet: LineScatterCandleRadarChartDataSet, ICandleChar
             return
         }
         
-        var entries = yVals as! [CandleChartDataEntry]
-        
-        var endValue : Int
-        
-        if end == 0 || end >= yValCount
-        {
-            endValue = yValCount - 1
-        }
-        else
-        {
-            endValue = end
-        }
-        
-        _lastStart = start
-        _lastEnd = end
-        
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for i in start.stride(through: endValue, by: 1)
+        _xMin = DBL_MAX
+        _xMax = -DBL_MAX
+        
+        for e in _values as! [CandleChartDataEntry]
         {
-            let e = entries[i]
-            
             if (e.low < _yMin)
             {
                 _yMin = e.low
@@ -71,6 +56,28 @@ public class CandleChartDataSet: LineScatterCandleRadarChartDataSet, ICandleChar
             {
                 _yMax = e.high
             }
+            
+            if (e.x < _xMin)
+            {
+                _xMin = e.x
+            }
+            
+            if (e.x > _xMax)
+            {
+                _xMax = e.x
+            }
+        }
+        
+        if (_yMin == DBL_MAX)
+        {
+            _yMin = 0.0
+            _yMax = 0.0
+        }
+        
+        if (_xMin == DBL_MAX)
+        {
+            _xMin = 0.0
+            _xMax = 0.0
         }
     }
     

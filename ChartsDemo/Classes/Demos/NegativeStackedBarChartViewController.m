@@ -126,7 +126,6 @@
         set.valueFormatter = _chartView.rightAxis.valueFormatter;
         set.valueFont = [UIFont systemFontOfSize:7.f];
         set.axisDependency = AxisDependencyRight;
-        set.barSpace = 0.4f;
         set.colors = @[
                        [UIColor colorWithRed:67/255.f green:67/255.f blue:72/255.f alpha:1.f],
                        [UIColor colorWithRed:124/255.f green:181/255.f blue:236/255.f alpha:1.f]
@@ -135,9 +134,10 @@
                             @"Men", @"Women"
                             ];
         
-        NSArray *xVals = @[ @"0-10", @"10-20", @"20-30", @"30-40", @"40-50", @"50-60", @"60-70", @"70-80", @"80-90", @"90-100", @"100+" ];
+        BarChartData *data = [[BarChartData alloc] initWithDataSet:set];
         
-        BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSet:set];
+        data.barWidth = 0.8;
+        
         _chartView.data = data;
         [_chartView setNeedsDisplay];
     }

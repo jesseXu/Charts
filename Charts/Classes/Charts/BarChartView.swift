@@ -35,14 +35,14 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         
         self.highlighter = BarChartHighlighter(chart: self)
         
-        _xAxis._axisMinimum = -0.5
+        //_xAxis._axisMinimum = -0.5
     }
     
     internal override func calcMinMax()
     {
         super.calcMinMax()
         
-        guard let data = _data else { return }
+        /*guard let data = _data else { return }
         
         let barData = data as! BarChartData
         
@@ -54,7 +54,7 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         
         let groupSpace = barData.groupSpace
         _xAxis.axisRange += Double(barData.xValCount) * Double(groupSpace)
-        _xAxis._axisMaximum = _xAxis.axisRange - _xAxis._axisMinimum
+        _xAxis._axisMaximum = _xAxis.axisRange - _xAxis._axisMinimum*/
     }
     
     /// - returns: the Highlight object (contains x-index and DataSet index) of the selected value at the given touch point inside the BarChart.
@@ -73,18 +73,17 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
     public func getBarBounds(e: BarChartDataEntry) -> CGRect
     {
         guard let
-            set = _data?.getDataSetForEntry(e) as? IBarChartDataSet
+            data = _data as? BarChartData,
+            set = data.getDataSetForEntry(e) as? IBarChartDataSet
             else { return CGRectNull }
         
-        let barspace = set.barSpace
-        let y = CGFloat(e.value)
-        let x = CGFloat(e.xIndex)
+        let y = e.y
+        let x = e.x
         
-        let barWidth: CGFloat = 0.5
+        let barWidth = data.barWidth
         
-        let spaceHalf = barspace / 2.0
-        let left = x - barWidth + spaceHalf
-        let right = x + barWidth - spaceHalf
+        let left = x - barWidth / 2.0
+        let right = x + barWidth / 2.0
         let top = y >= 0.0 ? y : 0.0
         let bottom = y <= 0.0 ? y : 0.0
         
@@ -95,7 +94,7 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         return bounds
     }
     
-    public override var lowestVisibleXIndex: Int
+    /*public override var lowestVisibleXIndex: Double
     {
         let step = CGFloat(_data?.dataSetCount ?? 0)
         let div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
@@ -103,10 +102,10 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         var pt = CGPoint(x: _viewPortHandler.contentLeft, y: _viewPortHandler.contentBottom)
         getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
         
-        return Int((pt.x <= CGFloat(chartXMin)) ? 0.0 : (pt.x / div) + 1.0)
+        return (pt.x <= CGFloat(chartXMin)) ? 0.0 : Double(pt.x / div) + 1.0
     }
 
-    public override var highestVisibleXIndex: Int
+    public override var highestVisibleXIndex: Double
     {
         let step = CGFloat(_data?.dataSetCount ?? 0)
         let div = (step <= 1.0) ? 1.0 : step + (_data as! BarChartData).groupSpace
@@ -114,8 +113,8 @@ public class BarChartView: BarLineChartViewBase, BarChartDataProvider
         var pt = CGPoint(x: _viewPortHandler.contentRight, y: _viewPortHandler.contentBottom)
         getTransformer(ChartYAxis.AxisDependency.Left).pixelToValue(&pt)
         
-        return Int((pt.x >= CGFloat(chartXMax)) ? CGFloat(chartXMax) / div : (pt.x / div))
-    }
+        return (pt.x >= CGFloat(chartXMax)) ? chartXMax / Double(div) : Double(pt.x / div)
+    }*/
 
     // MARK: Accessors
     

@@ -105,13 +105,6 @@
         [yVals2 addObject:[[ChartDataEntry alloc] initWithValue:(arc4random_uniform(mult) + mult / 2) xIndex:i]];
     }
     
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:parties[i % parties.count]];
-    }
-    
     RadarChartDataSet *set1 = [[RadarChartDataSet alloc] initWithYVals:yVals1 label:@"Set 1"];
     [set1 setColor:ChartColorTemplates.vordiplom[0]];
     set1.fillColor = ChartColorTemplates.vordiplom[0];
@@ -124,7 +117,7 @@
     set2.drawFilledEnabled = YES;
     set2.lineWidth = 2.0;
     
-    RadarChartData *data = [[RadarChartData alloc] initWithXVals:xVals dataSets:@[set1, set2]];
+    RadarChartData *data = [[RadarChartData alloc] initWithDataSets:@[set1, set2]];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:8.f]];
     [data setDrawValues:NO];
     

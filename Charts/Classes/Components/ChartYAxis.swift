@@ -40,12 +40,6 @@ public class ChartYAxis: ChartAxisBase
         case Right
     }
     
-    public var entries = [Double]()
-    public var entryCount: Int { return entries.count; }
-    
-    /// the number of y-label entries the y-labels should have, default 6
-    private var _labelCount = Int(6)
-    
     /// indicates if the top y-label entry is drawn or not
     public var drawTopYLabelEntryEnabled = true
     
@@ -183,30 +177,15 @@ public class ChartYAxis: ChartAxisBase
     
     public func setLabelCount(count: Int, force: Bool)
     {
-        _labelCount = count
-        
-        if (_labelCount > 25)
-        {
-            _labelCount = 25
-        }
-        if (_labelCount < 2)
-        {
-            _labelCount = 2
-        }
-    
+        super.labelCount = count
         forceLabelsEnabled = force
     }
     
-    /// the number of label entries the y-axis should have
-    /// max = 25,
-    /// min = 2,
-    /// default = 6,
-    /// be aware that this number is not fixed and can only be approximated
-    public var labelCount: Int
+    public override var labelCount: Int
     {
         get
         {
-            return _labelCount
+            return super.labelCount
         }
         set
         {
@@ -282,42 +261,5 @@ public class ChartYAxis: ChartAxisBase
     public var isShowOnlyMinMaxEnabled: Bool { return showOnlyMinMaxEnabled; }
     
     public var isDrawTopYLabelEntryEnabled: Bool { return drawTopYLabelEntryEnabled; }
-    
-    /// Calculates the minimum, maximum and range values of the YAxis with the given minimum and maximum values from the chart data.
-    /// - parameter dataMin: the y-min value according to chart data
-    /// - parameter dataMax: the y-max value according to chart
-    public func calculate(min dataMin: Double, max dataMax: Double)
-    {
-        // if custom, use value as is, else use data value
-        var min = _customAxisMin ? _axisMinimum : dataMin
-        var max = _customAxisMax ? _axisMaximum : dataMax
-
-        // temporary range (before calculations)
-        let range = abs(max - min)
-
-        // in case all values are equal
-        if range == 0.0
-        {
-            max = max + 1.0
-            min = min - 1.0
-        }
-
-        // bottom-space only effects non-custom min
-        if !_customAxisMin
-        {
-            let bottomSpace = range * Double(spaceBottom)
-            _axisMinimum = min - bottomSpace
-        }
-
-        // top-space only effects non-custom max
-        if !_customAxisMax
-        {
-            let topSpace = range * Double(spaceTop)
-            _axisMaximum = max + topSpace
-        }
-
-        // calc actual range
-        axisRange = abs(_axisMaximum - _axisMinimum)
-    }
 
 }

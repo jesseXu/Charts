@@ -16,11 +16,11 @@ import Foundation
 
 public class ChartDataEntry: NSObject
 {
-    /// the actual value (y axis)
-    public var value = Double(0.0)
+    /// the y value
+    public var y = Double(0.0)
     
-    /// the index on the x-axis
-    public var xIndex = Int(0)
+    /// the x value
+    public var x = Double(0.0)
     
     /// optional spot for additional data this Entry represents
     public var data: AnyObject?
@@ -30,20 +30,28 @@ public class ChartDataEntry: NSObject
         super.init()
     }
     
-    public init(value: Double, xIndex: Int)
+    /// An Entry represents one single entry in the chart.
+    /// - parameter x: the x value
+    /// - parameter y: the y value (the actual value of the entry)
+    public init(x: Double, y: Double)
     {
         super.init()
         
-        self.value = value
-        self.xIndex = xIndex
+        self.x = x
+        self.y = y
     }
     
-    public init(value: Double, xIndex: Int, data: AnyObject?)
+    /// An Entry represents one single entry in the chart.
+    /// - parameter x: the x value
+    /// - parameter y: the y value (the actual value of the entry)
+    /// - parameter data: Space for additional data this Entry represents.
+
+    public init(x: Double, y: Double, data: AnyObject?)
     {
         super.init()
         
-        self.value = value
-        self.xIndex = xIndex
+        self.x = x
+        self.y = y
         self.data = data
     }
     
@@ -66,12 +74,12 @@ public class ChartDataEntry: NSObject
             return false
         }
         
-        if (object!.xIndex != xIndex)
+        if (fabs(object!.x - x) > 0.00001)
         {
             return false
         }
         
-        if (fabs(object!.value - value) > 0.00001)
+        if (fabs(object!.y - y) > 0.00001)
         {
             return false
         }
@@ -83,7 +91,7 @@ public class ChartDataEntry: NSObject
     
     public override var description: String
     {
-        return "ChartDataEntry, xIndex: \(xIndex), value \(value)"
+        return "ChartDataEntry, x: \(x), y \(y)"
     }
     
     // MARK: NSCopying
@@ -92,8 +100,8 @@ public class ChartDataEntry: NSObject
     {
         let copy = self.dynamicType.init()
         
-        copy.value = value
-        copy.xIndex = xIndex
+        copy.x = x
+        copy.y = y
         copy.data = data
         
         return copy
@@ -117,12 +125,12 @@ public func ==(lhs: ChartDataEntry, rhs: ChartDataEntry) -> Bool
         return false
     }
     
-    if (lhs.xIndex != rhs.xIndex)
+    if (fabs(lhs.x - rhs.x) > 0.00001)
     {
         return false
     }
     
-    if (fabs(lhs.value - rhs.value) > 0.00001)
+    if (fabs(lhs.y - rhs.y) > 0.00001)
     {
         return false
     }

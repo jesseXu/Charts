@@ -70,12 +70,11 @@ public class ChartLegendRenderer: ChartRendererBase
                 }
                 else if (dataSet is IPieChartDataSet)
                 {
-                    var xVals = data.xVals
                     let pds = dataSet as! IPieChartDataSet
                     
-                    for j in 0..<min(clrs.count, entryCount, xVals.count)
+                    for j in 0..<min(clrs.count, entryCount)
                     {
-                        labels.append(xVals[j])
+                        labels.append((pds.entryForIndex(j) as? PieChartDataEntry)?.label)
                         colors.append(clrs[j])
                     }
                     

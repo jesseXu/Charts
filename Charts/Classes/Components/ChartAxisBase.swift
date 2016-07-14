@@ -48,7 +48,18 @@ public class ChartAxisBase: ChartComponentBase
 
     /// the flag can be used to turn off the antialias for grid lines
     public var gridAntialiasEnabled = true
-
+    
+    /// the actual array of entries
+    public var entries = [Double]()
+    
+    /// the number of entries the legend contains
+    public var entryCount: Int { return entries.count; }
+    
+    /// the number of y-label entries the y-labels should have
+    ///
+    /// **default**: 6
+    private var _labelCount = Int(6)
+    
     public override init()
     {
         super.init()
@@ -88,6 +99,32 @@ public class ChartAxisBase: ChartComponentBase
     
     /// the total range of values this axis covers
     public var axisRange = Double(0)
+    
+    /// the number of label entries the y-axis should have
+    /// max = 25,
+    /// min = 2,
+    /// default = 6,
+    /// be aware that this number is not fixed and can only be approximated
+    public var labelCount: Int
+    {
+        get
+        {
+            return _labelCount
+        }
+        set
+        {
+            _labelCount = newValue
+            
+            if (_labelCount > 25)
+            {
+                _labelCount = 25
+            }
+            if (_labelCount < 2)
+            {
+                _labelCount = 2
+            }
+        }
+    }
     
     /// Adds a new ChartLimitLine to this axis.
     public func addLimitLine(line: ChartLimitLine)
@@ -168,5 +205,31 @@ public class ChartAxisBase: ChartComponentBase
             _customAxisMax = true
             _axisMaximum = newValue
         }
+    }
+    
+    /// Calculates the minimum, maximum and range values of the YAxis with the given minimum and maximum values from the chart data.
+    /// - parameter dataMin: the y-min value according to chart data
+    /// - parameter dataMax: the y-max value according to chart
+    public func calculate(min dataMin: Double, max dataMax: Double)
+    {
+        // if custom, use value as is, else use data value
+        var min = _customAxisMin ? _axisMinimum : dataMin
+        var max = _customAxisMax ? _axisMaximum : dataMax
+        
+        // temporary range (before calculations)
+        let range = abs(max - min)
+        
+        // in case all values are equal
+        if range == 0.0
+        {
+            max = max + 1.0
+            min = min - 1.0
+        }
+        
+        _axisMinimum = min
+        _axisMaximum = max
+        
+        // actual range
+        axisRange = abs(max - min)
     }
 }

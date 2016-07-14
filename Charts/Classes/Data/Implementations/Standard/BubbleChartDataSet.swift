@@ -17,52 +17,31 @@ public class BubbleChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBubble
 {
     // MARK: - Data functions and accessors
     
-    internal var _xMax = Double(0.0)
-    internal var _xMin = Double(0.0)
     internal var _maxSize = CGFloat(0.0)
     
-    public var xMin: Double { return _xMin }
-    public var xMax: Double { return _xMax }
     public var maxSize: CGFloat { return _maxSize }
     public var normalizeSizeEnabled: Bool = true
     public var isNormalizeSizeEnabled: Bool { return normalizeSizeEnabled }
     
-    public override func calcMinMax(start start: Int, end: Int)
+    public override func calcMinMax()
     {
-        let yValCount = self.entryCount
-        
-        if yValCount == 0
+        if self.entryCount == 0
         {
             return
         }
-        
-        let entries = yVals as! [BubbleChartDataEntry]
     
         // need chart width to guess this properly
         
-        var endValue : Int
+        _yMin = DBL_MAX
+        _yMax = -DBL_MAX
         
-        if end == 0 || end >= yValCount
+        _xMin = DBL_MAX
+        _xMax = -DBL_MAX
+        
+        for entry in yVals as! [BubbleChartDataEntry]
         {
-            endValue = yValCount - 1
-        }
-        else
-        {
-            endValue = end
-        }
-        
-        _lastStart = start
-        _lastEnd = end
-        
-        _yMin = yMin(entries[start])
-        _yMax = yMax(entries[start])
-        
-        for i in start.stride(through: endValue, by: 1)
-        {
-            let entry = entries[i]
-
-            let ymin = yMin(entry)
-            let ymax = yMax(entry)
+            let ymin = entry.y
+            let ymax = entry.y
             
             if (ymin < _yMin)
             {
@@ -74,8 +53,8 @@ public class BubbleChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBubble
                 _yMax = ymax
             }
             
-            let xmin = xMin(entry)
-            let xmax = xMax(entry)
+            let xmin = entry.x
+            let xmax = entry.x
             
             if (xmin < _xMin)
             {
@@ -87,38 +66,25 @@ public class BubbleChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBubble
                 _xMax = xmax
             }
 
-            let size = largestSize(entry)
+            let size = entry.size
             
             if (size > _maxSize)
             {
                 _maxSize = size
             }
         }
-    }
-    
-    private func yMin(entry: BubbleChartDataEntry) -> Double
-    {
-        return entry.value
-    }
-    
-    private func yMax(entry: BubbleChartDataEntry) -> Double
-    {
-        return entry.value
-    }
-    
-    private func xMin(entry: BubbleChartDataEntry) -> Double
-    {
-        return Double(entry.xIndex)
-    }
-    
-    private func xMax(entry: BubbleChartDataEntry) -> Double
-    {
-        return Double(entry.xIndex)
-    }
-    
-    private func largestSize(entry: BubbleChartDataEntry) -> CGFloat
-    {
-        return entry.size
+        
+        if (_yMin == DBL_MAX)
+        {
+            _yMin = 0.0
+            _yMax = 0.0
+        }
+        
+        if (_xMin == DBL_MAX)
+        {
+            _xMin = 0.0
+            _xMax = 0.0
+        }
     }
     
     // MARK: - Styling functions and accessors

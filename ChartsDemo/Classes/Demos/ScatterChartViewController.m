@@ -93,13 +93,6 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i) stringValue]];
-    }
-    
     NSMutableArray *yVals1 = [[NSMutableArray alloc] init];
     NSMutableArray *yVals2 = [[NSMutableArray alloc] init];
     NSMutableArray *yVals3 = [[NSMutableArray alloc] init];
@@ -110,10 +103,10 @@
         [yVals1 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
         
         val = (double) (arc4random_uniform(range)) + 3;
-        [yVals2 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
+        [yVals2 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i + 0.33]];
         
         val = (double) (arc4random_uniform(range)) + 3;
-        [yVals3 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
+        [yVals3 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i + 0.66]];
     }
     
     ScatterChartDataSet *set1 = [[ScatterChartDataSet alloc] initWithYVals:yVals1 label:@"DS 1"];
@@ -137,7 +130,7 @@
     [dataSets addObject:set2];
     [dataSets addObject:set3];
     
-    ScatterChartData *data = [[ScatterChartData alloc] initWithXVals:xVals dataSets:dataSets];
+    ScatterChartData *data = [[ScatterChartData alloc] initWithDataSets:dataSets];
     [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:7.f]];
     
     _chartView.data = data;

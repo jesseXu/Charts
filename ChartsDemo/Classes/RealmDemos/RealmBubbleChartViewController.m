@@ -67,7 +67,7 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    RealmBubbleDataSet *set = [[RealmBubbleDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex" sizeField:@"bubbleSize"];
+    RealmBubbleDataSet *set = [[RealmBubbleDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex" sizeField:@"bubbleSize"];
     
     set.label = @"Realm BubbleDataSet";
     [set setColors:ChartColorTemplates.colorful alpha:0.43f];

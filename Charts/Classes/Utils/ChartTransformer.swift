@@ -66,11 +66,12 @@ public class ChartTransformer: NSObject
     }
     
     /// Transforms an Entry into a transformed point for bar chart
-    public func getTransformedValueBarChart(entry entry: ChartDataEntry, xIndex: Int, dataSetIndex: Int, phaseY: CGFloat, dataSetCount: Int, groupSpace: CGFloat) -> CGPoint
+    public func getTransformedValueBarChart(entry entry: ChartDataEntry, dataSetIndex: Int, phaseY: CGFloat, dataSetCount: Int, groupSpace: CGFloat) -> CGPoint
     {
         // calculate the x-position, depending on datasetcount
-        let x = CGFloat(xIndex + (xIndex * (dataSetCount - 1)) + dataSetIndex) + groupSpace * CGFloat(xIndex) + groupSpace / 2.0
-        let y = entry.value
+        let xIndex = entry.x
+        let x = CGFloat(xIndex + (xIndex * Double(dataSetCount - 1)) + Double(dataSetIndex)) + groupSpace * CGFloat(xIndex) + groupSpace / 2.0
+        let y = entry.y
         
         var valuePoint = CGPoint(
             x: x,
@@ -83,11 +84,12 @@ public class ChartTransformer: NSObject
     }
     
     /// Transforms an Entry into a transformed point for horizontal bar chart
-    public func getTransformedValueHorizontalBarChart(entry entry: ChartDataEntry, xIndex: Int, dataSetIndex: Int, phaseY: CGFloat, dataSetCount: Int, groupSpace: CGFloat) -> CGPoint
+    public func getTransformedValueHorizontalBarChart(entry entry: ChartDataEntry, dataSetIndex: Int, phaseY: CGFloat, dataSetCount: Int, groupSpace: CGFloat) -> CGPoint
     {
         // calculate the x-position, depending on datasetcount
-        let x = CGFloat(xIndex + (xIndex * (dataSetCount - 1)) + dataSetIndex) + groupSpace * CGFloat(xIndex) + groupSpace / 2.0
-        let y = entry.value
+        let xIndex = entry.x
+        let x = CGFloat(xIndex + (xIndex * Double(dataSetCount - 1)) + Double(dataSetIndex)) + groupSpace * CGFloat(xIndex) + groupSpace / 2.0
+        let y = entry.y
         
         var valuePoint = CGPoint(
             x: CGFloat(y) * phaseY,
@@ -113,6 +115,11 @@ public class ChartTransformer: NSObject
     public func pointValueToPixel(inout point: CGPoint)
     {
         point = CGPointApplyAffineTransform(point, valueToPixelMatrix)
+    }
+    
+    public func pixelForValue(x x: Double, y: Double) -> CGPoint
+    {
+        return CGPointApplyAffineTransform(CGPoint(x: x, y: y), valueToPixelMatrix)
     }
     
     /// Transform a rectangle with all matrices.
@@ -182,11 +189,19 @@ public class ChartTransformer: NSObject
     }
     
     /// - returns: the x and y values in the chart at the given touch point
-    /// (encapsulated in a PointD). This method transforms pixel coordinates to
+    /// (encapsulated in a CGPoint). This method transforms pixel coordinates to
     /// coordinates / values in the chart.
     public func getValueByTouchPoint(point: CGPoint) -> CGPoint
     {
         return CGPointApplyAffineTransform(point, pixelToValueMatrix)
+    }
+    
+    /// - returns: the x and y values in the chart at the given touch point
+    /// (x/y). This method transforms pixel coordinates to
+    /// coordinates / values in the chart.
+    public func getValueByTouchPoint(x x: CGFloat, y: CGFloat) -> CGPoint
+    {
+        return CGPointApplyAffineTransform(CGPoint(x: x, y: y), pixelToValueMatrix)
     }
     
     public var valueToPixelMatrix: CGAffineTransform

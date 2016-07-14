@@ -23,7 +23,7 @@ public class RealmRadarDataSet: RealmLineRadarDataSet, IRadarChartDataSet
 {
     public override func initialize()
     {
-        self.valueFont = NSUIFont.systemFontOfSize(13.0)
+        self.yFont = NSUIFont.systemFontOfSize(13.0)
     }
     
     // MARK: - Data functions and accessors

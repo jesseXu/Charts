@@ -30,22 +30,75 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         self.xAxis = xAxis
     }
     
-    public func computeAxis(xValAverageLength xValAverageLength: Double, xValues: [String?])
+    public override func computeAxis(min min: Double, max: Double, inverted: Bool)
     {
-        guard let xAxis = xAxis else { return }
+        var min = min, max = max
         
-        var a = ""
-        
-        let max = Int(round(xValAverageLength + Double(xAxis.spaceBetweenLabels)))
-        
-        for _ in 0 ..< max
+        // calculate the starting and entry point of the y-labels (depending on
+        // zoom / contentrect bounds)
+        if viewPortHandler.contentWidth > 10 && !viewPortHandler.isFullyZoomedOutX
         {
-            a += "h"
+            let p1 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentLeft, y: viewPortHandler.contentTop))
+            let p2 = transformer.getValueByTouchPoint(CGPoint(x: viewPortHandler.contentRight, y: viewPortHandler.contentTop))
+            
+            if inverted
+            {
+                min = Double(p2.y)
+                max = Double(p1.y)
+            }
+            else
+            {
+                min = Double(p1.y)
+                max = Double(p2.y)
+            }
         }
         
-        let widthText = a as NSString
+        computeAxisValues(min: min, max: max);
+    }
+    
+    public override func computeAxisValues(min min: Double, max: Double)
+    {
+        guard let xAxis = xAxis
+            else { return }
         
-        let labelSize = widthText.sizeWithAttributes([NSFontAttributeName: xAxis.labelFont])
+        let labelCount = xAxis.labelCount
+        let range = abs(max - min)
+        
+        let interval = range / Double(labelCount - 1)
+        
+        if xAxis.entries.count != labelCount
+        {
+            xAxis.entries = [Double](count: labelCount, repeatedValue: 0.0)
+        }
+        
+        xAxis.entries[0] = min
+        
+        for i in 1.stride(to: labelCount, by: 1)
+        {
+            xAxis.entries[i] = min + interval * Double(i)
+        }
+        
+        // set decimals
+        /*if interval < 1.0
+        {
+            xAxis.decimals = Int(ceil(-log10(interval)))
+        }
+        else
+        {
+            Axia.decimals = 0
+        }*/
+        
+        computeSize()
+    }
+    
+    public func computeSize()
+    {
+        guard let xAxis = xAxis
+            else { return }
+        
+        let longest = xAxis.getLongestLabel()
+        
+        let labelSize = longest.sizeWithAttributes([NSFontAttributeName: xAxis.labelFont])
         
         let labelWidth = labelSize.width
         let labelHeight = labelSize.height
@@ -56,8 +109,6 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         xAxis.labelHeight = labelHeight
         xAxis.labelRotatedWidth = labelRotatedSize.width
         xAxis.labelRotatedHeight = labelRotatedSize.height
-        
-        xAxis.values = xValues
     }
     
     public override func renderAxisLabels(context context: CGContext)
@@ -167,26 +218,23 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
             labelMaxSize.width = xAxis.wordWrapWidthPercent * valueToPixelMatrix.a
         }
         
-        for i in self.minX.stride(to: min(self.maxX + 1, xAxis.values.count), by: xAxis.axisLabelModulus)
+        let entries = xAxis.entries;
+        
+        for i in 0.stride(to: entries.count, by: 1)
         {
-            let label = xAxis.values[i]
-            if (label == nil)
-            {
-                continue
-            }
-            
-            position.x = CGFloat(i)
+            position.x = CGFloat(entries[i])
             position.y = 0.0
             position = CGPointApplyAffineTransform(position, valueToPixelMatrix)
             
             if (viewPortHandler.isInBoundsX(position.x))
             {
-                let labelns = label! as NSString
+                let label = String(xAxis.entries[i])
+                let labelns = label as NSString
                 
                 if (xAxis.isAvoidFirstLastClippingEnabled)
                 {
                     // avoid clipping of the last
-                    if (i == xAxis.values.count - 1 && xAxis.values.count > 1)
+                    if (i == xAxis.entryCount - 1 && xAxis.entryCount > 1)
                     {
                         let width = labelns.boundingRectWithSize(labelMaxSize, options: .UsesLineFragmentOrigin, attributes: labelAttrs, context: nil).size.width
                         
@@ -203,7 +251,7 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
                     }
                 }
                 
-                drawLabel(context: context, label: label!, xIndex: i, x: position.x, y: pos, attributes: labelAttrs, constrainedToSize: labelMaxSize, anchor: anchor, angleRadians: labelRotationAngleRadians)
+                drawLabel(context: context, label: label, xIndex: i, x: position.x, y: pos, attributes: labelAttrs, constrainedToSize: labelMaxSize, anchor: anchor, angleRadians: labelRotationAngleRadians)
             }
         }
     }
@@ -247,9 +295,11 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         
         var position = CGPoint(x: 0.0, y: 0.0)
         
-        for i in self.minX.stride(to: self.maxX, by: xAxis.axisLabelModulus)
+        let entries = xAxis.entries;
+        
+        for i in 0.stride(to: entries.count, by: 1)
         {
-            position.x = CGFloat(i)
+            position.x = CGFloat(entries[i])
             position.y = 0.0
             position = CGPointApplyAffineTransform(position, valueToPixelMatrix)
             

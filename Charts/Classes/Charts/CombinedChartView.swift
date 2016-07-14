@@ -47,7 +47,7 @@ public class CombinedChartView: BarLineChartViewBase, LineChartDataProvider, Bar
         renderer = CombinedChartRenderer(chart: self, animator: _animator, viewPortHandler: _viewPortHandler)
     }
     
-    override func calcMinMax()
+    /*override func calcMinMax()
     {
         super.calcMinMax()
         guard let data = _data else { return }
@@ -83,7 +83,7 @@ public class CombinedChartView: BarLineChartViewBase, LineChartDataProvider, Bar
         {
             _xAxis.axisRange = 1.0
         }
-    }
+    }*/
     
     public override var data: ChartData?
     {

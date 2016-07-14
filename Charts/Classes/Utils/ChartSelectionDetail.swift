@@ -17,8 +17,10 @@ import CoreGraphics
 
 public class ChartSelectionDetail: NSObject
 {
+    private var _x = CGFloat.NaN
     private var _y = CGFloat.NaN
-    private var _value = Double(0)
+    private var _xValue = Double(0)
+    private var _yValue = Double(0)
     private var _dataIndex = Int(0)
     private var _dataSetIndex = Int(0)
     private var _dataSet: IChartDataSet!
@@ -28,25 +30,32 @@ public class ChartSelectionDetail: NSObject
         super.init()
     }
     
-    public init(y: CGFloat, value: Double, dataIndex: Int, dataSetIndex: Int, dataSet: IChartDataSet)
+    public init(x: CGFloat, y: CGFloat, xValue: Double, yValue: Double, dataIndex: Int, dataSetIndex: Int, dataSet: IChartDataSet)
     {
         super.init()
         
+        _x = x
         _y = y
-        _value = value
+        _xValue = xValue
+        _yValue = yValue
         _dataIndex = dataIndex
         _dataSetIndex = dataSetIndex
         _dataSet = dataSet
     }
     
-    public convenience init(y: CGFloat, value: Double, dataSetIndex: Int, dataSet: IChartDataSet)
+    public convenience init(x: CGFloat, y: CGFloat, xValue: Double, yValue: Double, dataSetIndex: Int, dataSet: IChartDataSet)
     {
-        self.init(y: y, value: value, dataIndex: 0, dataSetIndex: dataSetIndex, dataSet: dataSet)
+        self.init(x: x, y: y, xValue: xValue, yValue: yValue, dataIndex: 0, dataSetIndex: dataSetIndex, dataSet: dataSet)
     }
     
-    public convenience init(value: Double, dataSetIndex: Int, dataSet: IChartDataSet)
+    public convenience init(xValue: Double, yValue: Double, dataSetIndex: Int, dataSet: IChartDataSet)
     {
-        self.init(y: CGFloat.NaN, value: value, dataIndex: 0, dataSetIndex: dataSetIndex, dataSet: dataSet)
+        self.init(x: CGFloat.NaN, y: CGFloat.NaN, xValue: xValue, yValue: yValue, dataIndex: 0, dataSetIndex: dataSetIndex, dataSet: dataSet)
+    }
+    
+    public var x: CGFloat
+    {
+        return _x
     }
     
     public var y: CGFloat
@@ -54,9 +63,14 @@ public class ChartSelectionDetail: NSObject
         return _y
     }
     
-    public var value: Double
+    public var xValue: Double
     {
-        return _value
+        return _xValue
+    }
+    
+    public var yValue: Double
+    {
+        return _yValue
     }
     
     public var dataIndex: Int
@@ -88,7 +102,12 @@ public class ChartSelectionDetail: NSObject
             return false
         }
         
-        if (object!.value != _value)
+        if (object!.xValue != _xValue)
+        {
+            return false
+        }
+        
+        if (object!.yValue != _yValue)
         {
             return false
         }
@@ -119,7 +138,12 @@ public func ==(lhs: ChartSelectionDetail, rhs: ChartSelectionDetail) -> Bool
         return false
     }
     
-    if (lhs.value != rhs.value)
+    if (lhs.xValue != rhs.xValue)
+    {
+        return false
+    }
+    
+    if (lhs.yValue != rhs.yValue)
     {
         return false
     }

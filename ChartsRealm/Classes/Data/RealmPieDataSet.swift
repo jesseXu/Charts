@@ -23,8 +23,8 @@ public class RealmPieDataSet: RealmBaseDataSet, IPieChartDataSet
 {
     public override func initialize()
     {
-        self.valueTextColor = NSUIColor.whiteColor()
-        self.valueFont = NSUIFont.systemFontOfSize(13.0)
+        self.yTextColor = NSUIColor.whiteColor()
+        self.yFont = NSUIFont.systemFontOfSize(13.0)
     }
     
     // MARK: - Styling functions and accessors
@@ -58,8 +58,8 @@ public class RealmPieDataSet: RealmBaseDataSet, IPieChartDataSet
     /// indicates the selection distance of a pie slice
     public var selectionShift = CGFloat(18.0)
     
-    public var xValuePosition: PieChartDataSet.ValuePosition = .InsideSlice
-    public var yValuePosition: PieChartDataSet.ValuePosition = .InsideSlice
+    public var xValuePosition: PieChartDataSet.yPosition = .InsideSlice
+    public var yValuePosition: PieChartDataSet.yPosition = .InsideSlice
     
     /// When valuePosition is OutsideSlice, indicates line color
     public var valueLineColor: NSUIColor? = NSUIColor.blackColor()

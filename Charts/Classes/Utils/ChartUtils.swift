@@ -67,16 +67,7 @@ public class ChartUtils
             return number + DBL_EPSILON
         }
     }
-    
-    /// - returns: the index of the DataSet that contains the closest value on the y-axis
-    internal class func closestDataSetIndexByPixelY(
-        valsAtIndex valsAtIndex: [ChartSelectionDetail],
-                    y: CGFloat,
-                    axis: ChartYAxis.AxisDependency?) -> Int?
-    {
-        return closestSelectionDetailByPixelY(valsAtIndex: valsAtIndex, y: y, axis: axis)?.dataSetIndex
-    }
-    
+        
     /// - returns: the index of the DataSet that contains the closest value on the y-axis
     internal class func closestDataSetIndexByValue(
         valsAtIndex valsAtIndex: [ChartSelectionDetail],
@@ -86,9 +77,10 @@ public class ChartUtils
         return closestSelectionDetailByValue(valsAtIndex: valsAtIndex, value: value, axis: axis)?.dataSetIndex
     }
     
-    /// - returns: the `ChartSelectionDetail` of the closest value on the y-axis
-    internal class func closestSelectionDetailByPixelY(
+    /// - returns: the `ChartSelectionDetail` of the closest value on the x-y cartesian axes
+    internal class func closestSelectionDetailByPixel(
         valsAtIndex valsAtIndex: [ChartSelectionDetail],
+                    x: CGFloat,
                     y: CGFloat,
                     axis: ChartYAxis.AxisDependency?) -> ChartSelectionDetail?
     {
@@ -101,11 +93,12 @@ public class ChartUtils
             
             if (axis == nil || sel.dataSet?.axisDependency == axis)
             {
-                let cdistance = abs(sel.y - y)
-                if (cdistance < distance)
+                let cDistance = hypot(x - sel.x, y - sel.y)
+
+                if (cDistance < distance)
                 {
                     detail = sel
-                    distance = cdistance
+                    distance = cDistance
                 }
             }
         }
@@ -126,10 +119,10 @@ public class ChartUtils
         {
             let sel = valsAtIndex[i]
             
-            if (axis == nil || sel.dataSet?.axisDependency == axis)
+            if axis == nil || sel.dataSet?.axisDependency == axis
             {
-                let cdistance = abs(sel.value - value)
-                if (cdistance < distance)
+                let cdistance = abs(sel.yValue - value)
+                if cdistance < distance
                 {
                     detail = sel
                     distance = cdistance

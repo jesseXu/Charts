@@ -79,13 +79,6 @@
 
 - (LineChartData *)dataWithCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:[@(i % 12) stringValue]];
-    }
-    
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
@@ -104,7 +97,7 @@
     set1.highlightColor = UIColor.whiteColor;
     set1.drawValuesEnabled = NO;
     
-    return [[LineChartData alloc] initWithXVals:xVals dataSet:set1];
+    return [[LineChartData alloc] initWithDataSet:set1];
 }
 
 #pragma mark - ChartViewDelegate

@@ -111,12 +111,8 @@
 
 - (void)setDataCount:(int)count range:(double)range
 {
-    NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < count; i++)
-    {
-        [xVals addObject:months[i % 12]];
-    }
+    _chartView.xAxis.axisMinValue = 0.0;
+    _chartView.xAxis.axisMaxValue = count;
     
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     
@@ -124,7 +120,7 @@
     {
         double mult = (range + 1);
         double val =  (double) (arc4random_uniform(mult));
-        [yVals addObject:[[BarChartDataEntry alloc] initWithValue:val xIndex:i]];
+        [yVals addObject:[[BarChartDataEntry alloc] initWithValue:val xIndex:(double)i + 0.5]];
     }
     
     BarChartDataSet *set1 = nil;
@@ -132,21 +128,21 @@
     {
         set1 = (BarChartDataSet *)_chartView.data.dataSets[0];
         set1.yVals = yVals;
-        _chartView.data.xValsObjc = xVals;
         [_chartView.data notifyDataChanged];
         [_chartView notifyDataSetChanged];
     }
     else
     {
         set1 = [[BarChartDataSet alloc] initWithYVals:yVals label:@"DataSet"];
-        set1.barSpace = 0.35;
         [set1 setColors:ChartColorTemplates.material];
         
         NSMutableArray *dataSets = [[NSMutableArray alloc] init];
         [dataSets addObject:set1];
         
-        BarChartData *data = [[BarChartData alloc] initWithXVals:xVals dataSets:dataSets];
+        BarChartData *data = [[BarChartData alloc] initWithDataSets:dataSets];
         [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.f]];
+        
+        data.barWidth = 0.9f;
         
         _chartView.data = data;
     }

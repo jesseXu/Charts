@@ -33,7 +33,7 @@ public class ChartXAxisRendererBarChart: ChartXAxisRenderer
     /// draws the x-labels on the specified y-position
     public override func drawLabels(context context: CGContext, pos: CGFloat, anchor: CGPoint)
     {
-        guard let
+        /*guard let
             xAxis = xAxis,
             barData = chart?.data as? BarChartData
             else { return }
@@ -105,14 +105,14 @@ public class ChartXAxisRendererBarChart: ChartXAxisRenderer
                 
                 drawLabel(context: context, label: label!, xIndex: i, x: position.x, y: pos, attributes: labelAttrs, constrainedToSize: labelMaxSize, anchor: anchor, angleRadians: labelRotationAngleRadians)
             }
-        }
+        }*/
     }
     
     private var _gridLineSegmentsBuffer = [CGPoint](count: 2, repeatedValue: CGPoint())
     
     public override func renderGridLines(context context: CGContext)
     {
-        guard let
+        /*guard let
             xAxis = xAxis,
             barData = chart?.data as? BarChartData
             else { return }
@@ -160,6 +160,6 @@ public class ChartXAxisRendererBarChart: ChartXAxisRenderer
             }
         }
         
-        CGContextRestoreGState(context)
+        CGContextRestoreGState(context)*/
     }
 }

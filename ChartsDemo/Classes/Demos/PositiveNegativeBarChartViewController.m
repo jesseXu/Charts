@@ -133,7 +133,7 @@
     for (int i = 0; i < dataList.count; i++)
     {
         NSDictionary *d = dataList[i];
-        BarChartDataEntry *entry = [[BarChartDataEntry alloc] initWithValue:[d[@"yValue"] doubleValue] xIndex:[d[@"xIndex"] integerValue]];
+        BarChartDataEntry *entry = [[BarChartDataEntry alloc] initWithValue:[d[@"yValue"] doubleValue] xValue:[d[@"xIndex"] doubleValue]];
         [values addObject:entry];
         
         [dates addObject:d[@"xValue"]];
@@ -150,16 +150,17 @@
     }
     
     BarChartDataSet *set = set = [[BarChartDataSet alloc] initWithYVals:values label:@"Values"];
-    set.barSpace = 0.4f;
     set.colors = colors;
     set.valueColors = colors;
     
-    BarChartData *data = [[BarChartData alloc] initWithXVals:dates dataSet:set];
+    BarChartData *data = [[BarChartData alloc] initWithDataSet:set];
     [data setValueFont:[UIFont systemFontOfSize:13.f]];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.maximumFractionDigits = 1;
     [data setValueFormatter:formatter];
+    
+    data.barWidth = 0.8;
     
     _chartView.data = data;
 }

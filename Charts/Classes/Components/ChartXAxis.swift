@@ -27,18 +27,16 @@ public class ChartXAxis: ChartAxisBase
         case BottomInside
     }
     
-    public var values = [String?]()
-    
-    /// width of the x-axis labels in pixels - this is automatically calculated by the computeAxis() methods in the renderers
+    /// width of the x-axis labels in pixels - this is automatically calculated by the `computeSize()` methods in the renderers
     public var labelWidth = CGFloat(1.0)
     
-    /// height of the x-axis labels in pixels - this is automatically calculated by the computeAxis() methods in the renderers
+    /// height of the x-axis labels in pixels - this is automatically calculated by the `computeSize()` methods in the renderers
     public var labelHeight = CGFloat(1.0)
     
-    /// width of the (rotated) x-axis labels in pixels - this is automatically calculated by the computeAxis() methods in the renderers
+    /// width of the (rotated) x-axis labels in pixels - this is automatically calculated by the `computeSize()` methods in the renderers
     public var labelRotatedWidth = CGFloat(1.0)
     
-    /// height of the (rotated) x-axis labels in pixels - this is automatically calculated by the computeAxis() methods in the renderers
+    /// height of the (rotated) x-axis labels in pixels - this is automatically calculated by the `computeSize()` methods in the renderers
     public var labelRotatedHeight = CGFloat(1.0)
     
     /// This is the angle for drawing the X axis labels (in degrees)
@@ -111,7 +109,7 @@ public class ChartXAxis: ChartAxisBase
     {
         var longest = ""
         
-        for i in 0 ..< values.count
+        /*for i in 0 ..< values.count
         {
             let text = values[i]
             
@@ -119,7 +117,7 @@ public class ChartXAxis: ChartAxisBase
             {
                 longest = text!
             }
-        }
+        }*/
         
         return longest
     }
@@ -156,11 +154,5 @@ public class ChartXAxis: ChartAxisBase
     public var isAxisModulusCustom: Bool
     {
         return _isAxisModulusCustom
-    }
-    
-    public var valuesObjc: [NSObject]
-    {
-        get { return ChartUtils.bridgedObjCGetStringArray(swift: values); }
-        set { self.values = ChartUtils.bridgedObjCGetStringArray(objc: newValue); }
     }
 }

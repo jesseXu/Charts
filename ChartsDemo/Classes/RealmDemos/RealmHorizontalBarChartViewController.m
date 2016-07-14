@@ -67,8 +67,8 @@
     
     RLMResults *results = [RealmDemoData allObjectsInRealm:realm];
     
-    // RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"value" xIndexField:@"xIndex"];
-    RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"stackValues" xIndexField:@"xIndex" stackValueField:@"floatValue"]; // stacked entries
+    // RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"value" xValueField:@"xIndex"];
+    RealmBarDataSet *set = [[RealmBarDataSet alloc] initWithResults:results yValueField:@"stackValues" xValueField:@"xIndex" stackValueField:@"floatValue"]; // stacked entries
 
     set.colors = @[
                    [ChartColorTemplates colorFromString:@"#8BC34A"],

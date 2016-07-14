@@ -20,14 +20,9 @@ public class PieChartData: ChartData
         super.init()
     }
     
-    public override init(xVals: [String?]?, dataSets: [IChartDataSet]?)
+    public override init(dataSets: [IChartDataSet]?)
     {
-        super.init(xVals: xVals, dataSets: dataSets)
-    }
-
-    public override init(xVals: [NSObject]?, dataSets: [IChartDataSet]?)
-    {
-        super.init(xVals: xVals, dataSets: dataSets)
+        super.init(dataSets: dataSets)
     }
 
     var dataSet: IPieChartDataSet?
@@ -115,7 +110,7 @@ public class PieChartData: ChartData
         
         for i in 0..<dataSet.entryCount
         {
-            yValueSum += dataSet.entryForIndex(i)?.value ?? 0.0
+            yValueSum += dataSet.entryForIndex(i)?.y ?? 0.0
         }
         
         return yValueSum
