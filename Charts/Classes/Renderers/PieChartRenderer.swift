@@ -412,7 +412,7 @@ public class PieChartRenderer: ChartDataRendererBase
                     
                     if dataSet.valueLineColor != nil
                     {
-                        CGContextSetStrokeColorWithColor(context, dataSet.valueLineColor!.CGColor)
+                        CGContextSetStrokeColorWithColor(context, dataSet.colorAt(j).CGColor)
                         CGContextSetLineWidth(context, dataSet.valueLineWidth);
                         
                         CGContextMoveToPoint(context, pt0.x, pt0.y)
@@ -455,13 +455,16 @@ public class PieChartRenderer: ChartDataRendererBase
                     }
                     else if drawYOutside
                     {
-                        ChartUtils.drawText(
-                            context: context,
-                            text: valueText,
-                            point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight / 2.0),
-                            align: align,
-                            attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
-                        )
+//                        ChartUtils.drawText(
+//                            context: context,
+//                            text: valueText,
+//                            point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight / 2.0),
+//                            align: align,
+//                            attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: dataSet.valueTextColorAt(j)]
+//                        )
+                        
+                        let image = dataSet.valueImages[j]
+                        image.drawInRect(CGRectMake(labelPoint.x - image.size.width/2, labelPoint.y, image.size.width, image.size.height))                        
                     }
                 }
                 
