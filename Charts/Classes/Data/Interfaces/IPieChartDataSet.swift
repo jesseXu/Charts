@@ -51,4 +51,7 @@ public protocol IPieChartDataSet: IChartDataSet
     
     /// When valuePosition is OutsideSlice, this allows variable line length
     var valueLineVariableLength: Bool { get set }
+    
+    // avatar
+    var valueImages: [NSUIImage] { get }
 }
