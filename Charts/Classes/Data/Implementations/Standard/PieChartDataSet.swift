@@ -94,6 +94,8 @@ public class PieChartDataSet: ChartDataSet, IPieChartDataSet
     /// When valuePosition is OutsideSlice, this allows variable line length
     public var valueLineVariableLength: Bool = true
     
+    public var valueImages = [NSUIImage]()    
+    
     // MARK: - NSCopying
     
     public override func copyWithZone(zone: NSZone) -> AnyObject
