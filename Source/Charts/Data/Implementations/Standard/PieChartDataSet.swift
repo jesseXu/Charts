@@ -102,6 +102,8 @@ open class PieChartDataSet: ChartDataSet, IPieChartDataSet
     /// the color for the slice-text labels
     open var entryLabelColor: NSUIColor? = nil
     
+    public var valueImages = [NSUIImage]()    
+    
     // MARK: - NSCopying
     
     open override func copyWithZone(_ zone: NSZone?) -> AnyObject

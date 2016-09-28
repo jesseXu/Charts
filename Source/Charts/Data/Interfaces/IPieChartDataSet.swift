@@ -50,6 +50,8 @@ public protocol IPieChartDataSet: IChartDataSet
     /// When valuePosition is OutsideSlice, this allows variable line length
     var valueLineVariableLength: Bool { get set }
     
+    // avatar
+    var valueImages: [NSUIImage] { get }
     /// the font for the slice-text labels
     var entryLabelFont: NSUIFont? { get set }
     
